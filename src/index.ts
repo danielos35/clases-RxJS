@@ -26,7 +26,7 @@ ajax.post(url,{
 
 
 
-// OTRA MANERA DE HACER PETICI
+// OTRA MANERA DE HACER PETICIONES
 ajax(
     {
         url,
