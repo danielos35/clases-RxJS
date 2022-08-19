@@ -1,9 +1,12 @@
-import { fromEvent, debounceTime, map, pluck } from "rxjs";
+import { fromEvent, debounceTime, map, pluck, mergeAll } from "rxjs";
 import { ajax } from "rxjs/ajax";
 /*
 APLANAMIENTO
 
-- Suscribirnos a un valor a una linea del tiempo
+MERGE ALL
+- Se suscribe a todos los observables a los que nos encontremos suscriptos
+
+- El procedimiento de unificar observables se conoce como "operadores de Aplanamiento"
 
 
 */
@@ -21,12 +24,11 @@ const input$ = fromEvent<KeyboardEvent>(textInput, "keyup");
 input$
   .pipe(
     debounceTime(500),
-    map((event) => {
-      const texto = event.target["value"];
-
-      return ajax.getJSON(`https://api.github.com/users/${texto}`);
-    })
+    pluck("target", "value"),
+    map((texto) =>
+      ajax.getJSON(`https://api.github.com/search/users?q=${texto}`)
+    ),
+    mergeAll(),
+    pluck("items")
   )
-  .subscribe((res) => {
-    res.pipe(pluck("url")).subscribe(console.log);
-  });
+  .subscribe(console.log);
