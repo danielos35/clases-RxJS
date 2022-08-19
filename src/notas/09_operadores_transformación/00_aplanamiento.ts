@@ -5,7 +5,7 @@ APLANAMIENTO
 
 - Suscribirnos a un valor a una linea del tiempo
 
-
+ESTE ES UN EJEMPLO SIN OPERADORES DE APLANAMIENTO DE DATOS
 */
 
 // Referencias
