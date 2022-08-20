@@ -1,5 +1,8 @@
 import { fromEvent, debounceTime, map, pluck, mergeAll } from "rxjs";
 import { ajax } from "rxjs/ajax";
+
+
+import { UsuarioGitHub } from "./interfaces/usuarioGitHub.interface";
 /*
 APLANAMIENTO
 
@@ -8,6 +11,7 @@ MERGE ALL
 
 - El procedimiento de unificar observables se conoce como "operadores de Aplanamiento"
 
+- Lo ideal es siempre tipar la entrada y la salia de información
 
 */
 
@@ -23,12 +27,12 @@ const input$ = fromEvent<KeyboardEvent>(textInput, "keyup");
 
 input$
   .pipe(
-    debounceTime(500),
-    pluck("target", "value"),
+    debounceTime<KeyboardEvent>(500),
+    pluck<KeyboardEvent>("target", "value"),
     map((texto) =>
       ajax.getJSON(`https://api.github.com/search/users?q=${texto}`)
     ),
     mergeAll(),
-    pluck("items")
+    pluck<any, any>("items")
   )
-  .subscribe(console.log);
+  .subscribe((res: UsuarioGitHub[]) => console.log(res[0].url));
